@@ -1,7 +1,7 @@
 import streamlit as st
 import torch
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
-model_path = "cyberbullying_model/cyberbullying_model"
+model_path = "unitary/toxic-bert"
 
 tokenizer = DistilBertTokenizerFast.from_pretrained(model_path)
 model = DistilBertForSequenceClassification.from_pretrained(model_path)
@@ -45,4 +45,5 @@ if st.button("Analyze Comment"):
         if max(probs) > 0.5:
             st.error("⚠️ Toxic or harmful language detected")
         else:
+
             st.success("Comment appears safe")
