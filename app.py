@@ -18,18 +18,20 @@ user_input = st.text_area("Enter a comment to analyze")
 
 if st.button("Analyze Comment"):
 
-```
-inputs = tokenizer(user_input, return_tensors="pt", truncation=True, padding=True)
+    inputs = tokenizer(user_input, return_tensors="pt", truncation=True, padding=True)
 
-with torch.no_grad():
-    outputs = model(**inputs)
+    with torch.no_grad():
+        outputs = model(**inputs)
 
-scores = torch.sigmoid(outputs.logits).numpy()[0]
+    scores = torch.sigmoid(outputs.logits).numpy()[0]
 
-st.subheader("Prediction Results")
+    st.subheader("Prediction Results")
 
-for i, label in enumerate(labels):
-    st.progress(float(scores[i]))
-    st.write(f"{label}: {round(scores[i]*100,2)} %")
-```
+    for i, label in enumerate(labels):
+        st.progress(float(scores[i]))
+        st.write(f"{label}: {round(scores[i]*100,2)} %")
+
+
+
+
 
