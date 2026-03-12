@@ -32,6 +32,7 @@ if st.button("Analyze Comment"):
         st.subheader("Prediction Results")
 
         toxic_detected = False
+        toxic_label = None
 
         for i, label in enumerate(labels):
             score = float(scores[i])
@@ -40,11 +41,13 @@ if st.button("Analyze Comment"):
 
             if score > 0.5:
                 toxic_detected = True
+                toxic_label = label
 
         if toxic_detected:
-            st.error("⚠️ This comment may contain toxic or cyberbullying language.")
+            st.error(f"⚠️Cyberbullying detected: {toxic_label}")
         else:
             st.success("✅ This comment appears safe.")
+
 
 
 
