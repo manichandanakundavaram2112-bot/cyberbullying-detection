@@ -39,7 +39,7 @@ if st.button("Analyze Comment"):
             st.progress(score)
             st.write(f"{label}: {round(score*100,2)} %")
 
-            if score > 0.5:
+            if score > 0.7:
                 toxic_detected = True
                 toxic_label = label
 
@@ -47,6 +47,7 @@ if st.button("Analyze Comment"):
             st.error(f"⚠️Cyberbullying detected: {toxic_label}")
         else:
             st.success("✅ This comment appears safe.")
+
 
 
 
