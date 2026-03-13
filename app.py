@@ -43,10 +43,11 @@ if st.button("Analyze Comment"):
         max_label = labels[scores.argmax()]
 
         # Threshold decision
-        if max_score > 0.4:
+        if max_score > 0.6:
             st.error(f"⚠️ Cyberbullying detected: {max_label}")
         else:
             st.success("✅ This comment appears safe.")
+
 
 
 
