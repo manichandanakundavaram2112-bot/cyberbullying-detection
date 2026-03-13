@@ -14,13 +14,12 @@ labels = ["toxic","severe_toxic","obscene","threat","insult","identity_hate"]
 st.set_page_config(page_title="Cyberbullying Detection", page_icon="🛡")
 
 st.title("🛡 Cyberbullying Detection System")
-st.write("This system analyzes online comments and detects potential cyberbullying using a machine learning model.")
+st.write("Analyze comments and detect potential cyberbullying using a DistilBERT NLP model.")
 
 # Initialize history
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# User input
 user_input = st.text_area("Enter a comment to analyze")
 
 if st.button("Analyze Comment"):
@@ -34,7 +33,7 @@ if st.button("Analyze Comment"):
         with torch.no_grad():
             outputs = model(**inputs)
 
-        scores = torch.sigmoid(outputs.logits).numpy()[0]
+        scores = torch.sigmoid(outputs.logits).cpu().numpy()[0]
 
         st.subheader("Prediction Results")
 
@@ -44,58 +43,55 @@ if st.button("Analyze Comment"):
             st.progress(score)
             st.write(f"{label}: {round(score*100,2)} %")
 
-        # Most toxic category
+        # Get highest category
         max_score = max(scores)
         max_label = labels[scores.argmax()]
 
         st.write(f"Most likely category: **{max_label}**")
 
-        # Individual scores
-        toxic_score = scores[0]
-        severe_score = scores[1]
-        obscene_score = scores[2]
-        threat_score = scores[3]
-        insult_score = scores[4]
-        identity_score = scores[5]
+        # Individual label scores
+        toxic = scores[0]
+        severe = scores[1]
+        obscene = scores[2]
+        threat = scores[3]
+        insult = scores[4]
+        identity = scores[5]
 
-        # Detection logic
+        # Improved detection logic
         if (
-            toxic_score > 0.35 or
-            insult_score > 0.35 or
-            obscene_score > 0.40 or
-            severe_score > 0.50 or
-            threat_score > 0.50 or
-            identity_score > 0.50
+            toxic > 0.65 or
+            insult > 0.65 or
+            obscene > 0.70 or
+            severe > 0.80 or
+            threat > 0.80 or
+            identity > 0.80
         ):
             st.error("⚠️ Cyberbullying detected in the comment.")
             st.warning("⚠ Please reconsider posting harmful language.")
         else:
             st.success("✅ This comment appears safe.")
 
-        # Save comment
+        # Save comment history
         st.session_state.history.append(user_input)
 
-        # Create report
-        data = {
+        # Download report
+        report = pd.DataFrame({
             "Label": labels,
             "Score": scores
-        }
-
-        df = pd.DataFrame(data)
+        })
 
         st.download_button(
             label="Download Analysis Report",
-            data=df.to_csv(index=False),
+            data=report.to_csv(index=False),
             file_name="cyberbullying_analysis.csv",
             mime="text/csv"
         )
 
-# Comment history
+# Display history
 st.subheader("Analyzed Comments History")
 
 for comment in st.session_state.history:
     st.write(comment)
-
 
 
 
