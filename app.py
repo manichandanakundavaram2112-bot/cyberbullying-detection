@@ -58,19 +58,18 @@ if st.button("Analyze Comment"):
         identity = scores[5]
 
         # Improved detection logic
-        if (
-            toxic > 0.65 or
-            insult > 0.65 or
-            obscene > 0.70 or
-            severe > 0.80 or
-            threat > 0.80 or
-            identity > 0.80
-        ):
-            st.error("⚠️ Cyberbullying detected in the comment.")
-            st.warning("⚠ Please reconsider posting harmful language.")
-        else:
-            st.success("✅ This comment appears safe.")
+        # Detection logic using highest probability
+max_score = max(scores)
+max_label = labels[scores.argmax()]
 
+st.write(f"Most likely category: **{max_label}**")
+
+if max_score > 0.45:
+    st.error(f"⚠️ Cyberbullying detected: {max_label}")
+    st.warning("⚠ Please reconsider posting harmful language.")
+else:
+    st.success("✅ This comment appears safe.")
+    
         # Save comment history
         st.session_state.history.append(user_input)
 
