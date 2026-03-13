@@ -29,24 +29,26 @@ if st.button("Analyze Comment"):
 
         scores = torch.sigmoid(outputs.logits).numpy()[0]
 
-        st.subheader("Prediction Results")
+st.subheader("Prediction Results")
 
-        toxic_detected = False
-        toxic_label = None
+for i, label in enumerate(labels):
+    score = float(scores[i])
+    st.progress(score)
+    st.write(f"{label}: {round(score*100,2)} %")
 
-        for i, label in enumerate(labels):
-            score = float(scores[i])
-            st.progress(score)
-            st.write(f"{label}: {round(score*100,2)} %")
+max_score = max(scores)
+max_label = labels[scores.argmax()]
 
-            if score > 0.7:
-                toxic_detected = True
-                toxic_label = label
+if max_score > 0.4:
+    st.error(f"⚠️ Cyberbullying detected: {max_label}")
+else:
+    st.success("✅ This comment appears safe.")
 
         if toxic_detected:
             st.error(f"⚠️Cyberbullying detected: {toxic_label}")
         else:
             st.success("✅ This comment appears safe.")
+
 
 
 
