@@ -43,14 +43,21 @@ if st.button("Analyze Comment"):
             st.progress(score)
             st.write(f"{label}: {round(score*100,2)} %")
 
-        # Detection logic using highest probability
+        # Get highest category
         max_score = max(scores)
         max_label = labels[scores.argmax()]
 
         st.write(f"Most likely category: **{max_label}**")
 
-        if max_score > 0.60:
-            st.error(f"⚠️ Cyberbullying detected: {max_label}")
+        # Keyword filter for obvious abuse
+        bad_words = ["idiot","stupid","shitty","useless","moron","dumb","kill","die","hate","fool"]
+
+        text_lower = user_input.lower()
+        keyword_flag = any(word in text_lower for word in bad_words)
+
+        # Final detection logic
+        if max_score > 0.45 or keyword_flag:
+            st.error("⚠️ Cyberbullying detected in the comment.")
             st.warning("⚠ Please reconsider posting harmful language.")
         else:
             st.success("✅ This comment appears safe.")
