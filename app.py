@@ -49,7 +49,7 @@ if st.button("Analyze Comment"):
 
         st.write(f"Most likely category: **{max_label}**")
 
-        if max_score > 0.45:
+        if max_score > 0.60:
             st.error(f"⚠️ Cyberbullying detected: {max_label}")
             st.warning("⚠ Please reconsider posting harmful language.")
         else:
