@@ -21,6 +21,7 @@ if st.button("Analyze Comment"):
 
     if user_input.strip() == "":
         st.warning("Please enter a comment.")
+
     else:
         inputs = tokenizer(user_input, return_tensors="pt", truncation=True, padding=True)
 
@@ -29,25 +30,25 @@ if st.button("Analyze Comment"):
 
         scores = torch.sigmoid(outputs.logits).numpy()[0]
 
-st.subheader("Prediction Results")
+        st.subheader("Prediction Results")
 
-for i, label in enumerate(labels):
-    score = float(scores[i])
-    st.progress(score)
-    st.write(f"{label}: {round(score*100,2)} %")
+        # Show probabilities
+        for i, label in enumerate(labels):
+            score = float(scores[i])
+            st.progress(score)
+            st.write(f"{label}: {round(score*100,2)} %")
 
-max_score = max(scores)
-max_label = labels[scores.argmax()]
+        # Determine highest probability label
+        max_score = max(scores)
+        max_label = labels[scores.argmax()]
 
-if max_score > 0.4:
-    st.error(f"⚠️ Cyberbullying detected: {max_label}")
-else:
-    st.success("✅ This comment appears safe.")
-
-        if toxic_detected:
-            st.error(f"⚠️Cyberbullying detected: {toxic_label}")
+        # Threshold decision
+        if max_score > 0.4:
+            st.error(f"⚠️ Cyberbullying detected: {max_label}")
         else:
             st.success("✅ This comment appears safe.")
+
+
 
 
 
