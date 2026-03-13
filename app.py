@@ -43,33 +43,18 @@ if st.button("Analyze Comment"):
             st.progress(score)
             st.write(f"{label}: {round(score*100,2)} %")
 
-        # Get highest category
+        # Detection logic using highest probability
         max_score = max(scores)
         max_label = labels[scores.argmax()]
 
         st.write(f"Most likely category: **{max_label}**")
 
-        # Individual label scores
-        toxic = scores[0]
-        severe = scores[1]
-        obscene = scores[2]
-        threat = scores[3]
-        insult = scores[4]
-        identity = scores[5]
+        if max_score > 0.45:
+            st.error(f"⚠️ Cyberbullying detected: {max_label}")
+            st.warning("⚠ Please reconsider posting harmful language.")
+        else:
+            st.success("✅ This comment appears safe.")
 
-        # Improved detection logic
-        # Detection logic using highest probability
-max_score = max(scores)
-max_label = labels[scores.argmax()]
-
-st.write(f"Most likely category: **{max_label}**")
-
-if max_score > 0.45:
-    st.error(f"⚠️ Cyberbullying detected: {max_label}")
-    st.warning("⚠ Please reconsider posting harmful language.")
-else:
-    st.success("✅ This comment appears safe.")
-    
         # Save comment history
         st.session_state.history.append(user_input)
 
