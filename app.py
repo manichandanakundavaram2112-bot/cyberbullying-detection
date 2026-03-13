@@ -76,7 +76,7 @@ if st.button("Analyze Comment"):
         good_flag = any(word in text_lower for word in good_words)
 
         # Final classification
-        if bad_flag or max_score > 0.45:
+        if bad_flag or max_score > 0.60:
             st.error("⚠ Cyberbullying Detected")
             st.write(f"Category: **{max_label}**")
             st.warning("Please reconsider posting harmful language.")
