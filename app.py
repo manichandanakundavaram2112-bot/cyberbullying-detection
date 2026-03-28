@@ -24,7 +24,7 @@ labels = ["toxic","severe_toxic","obscene","threat","insult","identity_hate"]
 # Bad words list
 bad_words = [
     "idiot","stupid","shitty","useless","moron","dumb",
-    "kill","die","hate","fool","trash"
+    "kill","die","hate","fool","trash","dipshit","shit","fucking","nigga","disgusting","yuck"
 ]
 
 # Input box
